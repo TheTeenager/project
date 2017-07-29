@@ -9,4 +9,4 @@ $(FINAL):$(OBJECT)
 %.o:%.c
 	$(CC) -c $< -o $@ $(OPTIONS)
 clean:
-	rm -rvf $(OBJECT) $(FINAL) *.txt
+	rm -rvf $(OBJECT) $(FINAL) 

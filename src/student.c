@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <string.h>
 #include "../include/include.h"
-#include "../include/teacher.h"
 #include "../include/tool.h"
+#include "../include/teacher.h"
 
-
+//打印自己的信息
 void print_own_info()
 {
 		student_t *l = read_student_file();
@@ -16,18 +16,16 @@ void print_own_info()
 				}
 				l = l->next;		
 		}
-		printf("\t\tid\t\t名字\t\t数学成绩\t\t语文成绩\n");
-		printf("\t\t%d\t\t%s\t\t%.2f\t\t%.2f\n", l->next->data.id, l->next->data.name, l->next->data.math, l->next->data.chinese);
-		printf("\n");
+		printf("\t\tid\t\t姓名\t\t数学\t\t语文\t\t总成绩\n");
+		printf("\t\t%d\t\t%s\t\t%.2f\t\t%.2f\t\t%.2f\n", l->next->data.id, l->next->data.name, l->next->data.math, l->next->data.chinese, l->next->data.math + l->next->data.chinese);
 		printf("按回车键继续...\n");
 		while(getchar()!='\n');
-
-
 }
 
 
 
 
+//更改学生密码
 void change_student_passwd()
 {
 		char check_passwd[MAX_PASSWD_LEN] = {'\0'};

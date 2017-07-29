@@ -82,7 +82,7 @@ void root_register_menu()
 			}
 }
 	
-
+//管理员菜单
 void root_menu()
 {
 		int flag = 1;
@@ -169,8 +169,14 @@ void teacher_register_menu()
 			}
 			if(strcmp(check_passwd, l->next->data.passwd) == 0)
 			{
-					//教师界面
-					teacher_menu();
+				if(l->next->data.subject == HEAD)
+				{
+						head_teacher_menu();  //班主任界面
+				}
+				else
+				{
+						other_teacher_menu();  //任课老师界面
+				}
 			}
 			else
 			{
@@ -182,23 +188,34 @@ void teacher_register_menu()
 
 
 
-
-void teacher_menu()
+//班主任界面
+void head_teacher_menu()
 {
+		teacher_t *l = read_teacher_file();
+		while(l->next != NULL)
+		{
+				if(l->next->data.id == teacher_id)
+				{
+						break;
+				}
+				l = l->next;
+		}
 		int flag = 1;
 		while(flag)
 		{
 				system("clear");
 				printf("**********************\n");
-				printf("教师界面\n");
+				printf("班主任界面\n");
+				printf("欢迎班主任：%s的登陆使用！\n", l->next->data.name);
 				printf("1.录入学生信息\n"
 						"2.查看学生信息\n"
 						"3.修改学生信息\n"
 						"4.删除学生信息\n"
-						"5.查看排名\n"
-						"6.修改自己的登陆密码\n"
-						"7.辞职\n"
-						"8.注销\n");
+						"5.查看信息按id升序\n"
+						"6.查看信息按总分升序\n"
+						"7.修改自己的登陆密码\n"
+						"8.辞职\n"
+						"9.注销\n");
 				printf("请输入你的选择\n");
 				char choose = '\0';
 				scanf("%c",&choose);
@@ -211,29 +228,33 @@ void teacher_menu()
 								break;
 						case '2':
 								//查看学生信息
-								print_student_info();
+								print_student_info(l->next->data.subject);
 								break;
 						case '3':
 								//更改学生信息
-						    	change_student_info(NULL);
+						    	change_student_info(l->next->data.subject, NULL);
 								break;
 						case '4':
 								//删除学生信息
 								delete_student_info(NULL);
 								break;
 						case '5':
-								//查看排名
-								print_student_info_by_ranking();
+								//查看信息按id升序
+								print_student_info_from_head(1);
 								break;
 						case '6':
+								//查看信息按总成绩升序
+								print_student_info_from_head(0);
+								break;
+						case '7':
 								//修改自己的登陆密码
 								change_teacher_passwd();
 								break;
-						case '7':
+						case '8':
 								//辞职
 								printf("resign\n");
 								break;
-						case '8':
+						case '9':
 								//注销登陆（返回上一菜单）
 								flag = 0;
 								break;
@@ -249,6 +270,70 @@ void teacher_menu()
 }
 
 
+//任课老师界面
+void other_teacher_menu()
+{
+		teacher_t *l = read_teacher_file();
+		while(l->next != NULL)
+		{
+				if(l->next->data.id == teacher_id)
+				{
+						break;
+				}
+				l = l->next;
+		}
+		int flag = 1;
+		while(flag)
+		{
+				system("clear");
+				printf("**********************\n");
+				printf("任课教师界面\n");
+				printf("欢迎任课教师：%s的登陆使用！\n", l->next->data.name);
+				printf(	"1.查看学生科目信息\n"
+						"2.修改学生科目信息\n"
+						"3.查看学生科目成绩排名\n"
+						"4.修改自己的登陆密码\n"
+						"5.辞职\n"
+						"6.注销\n");
+				printf("请输入你的选择\n");
+				char choose = '\0';
+				scanf("%c",&choose);
+				while(getchar()!='\n');
+				switch(choose)
+				{
+						case '1':
+								//查看学生信息
+								print_student_info(l->next->data.subject);
+								break;
+						case '2':
+								//更改学生科目信息
+						    	change_student_info(l->next->data.subject, NULL);
+								break;
+						case '3':
+								//查看数学成绩排名
+								print_student_info_from_other(l->next->data.subject);
+								break;
+						case '4':
+								//修改自己的登陆密码
+								change_teacher_passwd();
+								break;
+						case '5':
+								//辞职
+								printf("resign\n");
+								break;
+						case '6':
+								//注销登陆（返回上一菜单）
+								flag = 0;
+								break;
+						default:
+								//错误输入
+								printf("输入有误！请重新输入...\n"
+										"按回车键继续...\n");
+								while(getchar()!='\n');
+				}
+
+		}
+}
 
 
 //学生登陆菜单
@@ -304,12 +389,22 @@ void student_register_menu()
 
 void student_menu()
 {
+		student_t *l = read_student_file();
+		while(l->next != NULL)
+		{
+				if(l->next->data.id == student_id)
+				{
+						break;
+				}
+					l = l->next;
+		}
 		int flag = 1;
 		while(flag)
 		{
 				system("clear");
 				printf("**********************\n");
 				printf("学生界面\n");
+				printf("欢迎%s同学的登陆使用！\n", l->next->data.name);
 				printf("1.查看自己信息\n"
 						"2.修改密码\n"
 						"3.给老师留言\n"

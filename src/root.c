@@ -16,20 +16,15 @@ void input_teacher_info()
 	}
 	temp->next = NULL;
 	strncpy(temp->data.passwd, "123", MAX_PASSWD_LEN-1);  //教师默认密码123
+	temp->data.resign = 0;  //默认教师未辞职
 	printf("输入教师工号：");
 	scanf("%d",&temp->data.id);
 	while(getchar()!='\n');
 	printf("输入教师姓名：");
 	scanf("%s",temp->data.name);
 	while(getchar()!='\n');
-	printf("输入教师职位：");
-	scanf("%s", temp->data.position);
-	while(getchar()!='\n');
-	printf("输入教师教学科目：");
-	scanf("%s", temp->data.subject);
-	while(getchar()!='\n');
-	printf("输入辞职是否成功（1.成功 0.失败）：");
-	scanf("%d", &temp->data.resign);
+	printf("输入教师教学科目(0.班主任 1.数学教师 2.语文教师)：");
+	scanf("%d", &temp->data.subject);
 	while(getchar()!='\n');
 	
 	if(l->next != NULL)
@@ -101,10 +96,11 @@ void print_teacher_info()
 				while(getchar()!='\n');
 				return ;
 		}
-		printf("\t\t教师工号\t\t密码\t\t名字\t\t职位\t\t教学科目\t\t是否辞职\n");
+		printf("\t\t注释：科目中 0.班主任，1.数学教师，2.语文教师\n"
+						"\t\t教工号\t\t密码\t\t名字\t\t科目\t\t辞职否\n");
 		while(l->next != NULL)
 		{
-				printf("\t\t%d\t\t%s\t\t%s\t\t%s\t\t%s\t\t%d\n", l->next->data.id, l->next->data.passwd, l->next->data.name, l->next->data.position, l->next->data.subject, l->next->data.resign);
+				printf("\t\t%d\t\t%s\t\t%s\t\t%d\t\t%d\n", l->next->data.id, l->next->data.passwd, l->next->data.name, l->next->data.subject, l->next->data.resign);
 				l = l->next;
 		}
 		printf("\n");
@@ -200,15 +196,12 @@ void change_teacher_info(teacher *ptr)
 		memset(&temp, 0, sizeof(temp));
 
 		temp.id = id;
-		
+    	strncpy(temp.passwd,  l->next->data.passwd, MAX_PASSWD_LEN-1);
 		printf("输入新的教师姓名：");
 		scanf("%s",temp.name);
 		while(getchar()!='\n');
-		printf("输入新的教师职位：");
-		scanf("%s", temp.position);
-		while(getchar()!='\n');
-		printf("输入新的教师教学科目：");
-		scanf("%s", temp.subject);
+		printf("输入新的教师教学科目(0.班主任 1.数学教师 2.语文教师)：");
+		scanf("%d", &temp.subject);
 		while(getchar()!='\n');
 		printf("输入辞职是否成功（1.成功 0.失败）：");
 		scanf("%d", &temp.resign);
@@ -226,114 +219,5 @@ void change_teacher_info(teacher *ptr)
 		
    	    write_teacher_file(head);
 }
-
-#if 0
-void print_student_info_by_ranking()
-{
-	student_t *l = read_student_file();
-	if(l->next == NULL)
-	{
-		printf("没有任何信息\n");
-		return ;
-	}
-	student_t *p1 = l->next;
-	student_t *low = memset(&low, 0, sizeof(low));
-	student_t *p2 = memset(&low, 0, sizeof(low));
-	
-	student_t *temp=(student_t *)malloc(sizeof(student_t));
-	temp->next = NULL;
-	
-	while(p1 != NULL)
-	{
-		low = p1;
-		p2 = p1->next;
-		while(p2 != NULL)
-		{
-			if(low->data.math > p2->data.math)
-			{
-				low = p2;
-				p2 = p2->next;
-			}
-			else
-			{
-				p2 = p2->next;
-			}
-		}
-		if(low != p1)
-		{
-			temp->data = low->data;
-			low->data = p1->data;
-			p1->data = temp->data;
-		}	
-		p1 = p1->next;
-	}
-	
-		while(l->next != NULL)
-		{
-				printf("\t\t%d\t\t%s\t\t%.2f\t\t%.2f\n", l->next->data.id, l->next->data.name, l->next->data.math, l->next->data.chinese);
-				l = l->next;
-		}
-		printf("\n");
-		printf("按回车键继续...\n");
-		while(getchar()!='\n');
-	
-}
-
-
-/*
-void change_teacher_passwd()
-{
-		printf("请输入想要删除的学生id：\n");
-		int id = 0;
-		scanf("%d",&id);
-		while(getchar()!='\n');
-		student_t *l = read_student_file();
-		student_t *head = l;
-		student_t *p = NULL;
-		while(l->next != NULL)
-		{
-				if(l->next->data.id == id)
-				{
-						p = l->next;
-						break;
-				}
-				l = l->next;
-				
-		}
-		if(p == NULL)
-		{
-				printf("无此id学生\n");	
-				printf("按回车键继续...\n");
-				while(getchar()!='\n');
-				return;
-		}
-		l->next = p->next;
-		printf("删除成功!\n"
-				"按回车键继续...\n");
-		while(getchar()!='\n');
-		if(ptr != NULL)
-		{
-				*ptr = p->data;
-		}
-		free(p), p = NULL;
-		
-   	    write_student_file(head);a
-		
-}
-*/
-#endif
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

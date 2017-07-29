@@ -17,7 +17,7 @@ void input_student_info()
 		return ;
 	}
 	temp->next = NULL;
-	strncpy(temp->data.passwd, "0", MAX_PASSWD_LEN-1);
+	strncpy(temp->data.passwd, "0", MAX_PASSWD_LEN-1);  //学生的初始密码为0
 	printf("输入学生id：");
 	scanf("%d",&temp->data.id);
 	while(getchar()!='\n');
@@ -89,7 +89,7 @@ student_t * read_student_file()
 }
 
 //打印学生信息
-void print_student_info()
+void print_student_info(int subject)  //参数为教师职位
 {
 		student_t *l = read_student_file();
 		if(l->next == NULL)
@@ -99,25 +99,49 @@ void print_student_info()
 				while(getchar()!='\n');
 				return ;
 		}
-		printf("\t\tid\t\t密码\t\t名字\t\t数学成绩\t\t语文成绩\n");
-		while(l->next != NULL)
+		if(subject == HEAD)
 		{
-				printf("\t\t%d\t\t%s\t\t%s\t\t%.2f\t\t%.2f\n", l->next->data.id, l->next->data.passwd, l->next->data.name, l->next->data.math, l->next->data.chinese);
-				l = l->next;
+			printf("\t\tid\t\t密码\t\t名字\t\t数学\t\t语文\t\t总成绩\n");
+			while(l->next != NULL)
+			{
+					printf("\t\t%d\t\t%s\t\t%s\t\t%.2f\t\t%.2f\t\t%.2f\n", l->next->data.id, l->next->data.passwd, l->next->data.name, l->next->data.math, l->next->data.chinese, l->next->data.math + l->next->data.chinese);
+					l = l->next;
+			}
+			printf("\n");
+			printf("按回车键继续...\n");
+			while(getchar()!='\n');
 		}
-		printf("\n");
-		printf("按回车键继续...\n");
-		while(getchar()!='\n');
+		else if(subject == MATH)
+		{
+			printf("\t\tid\t\t名字\t\t数学\n");
+			while(l->next != NULL)
+			{
+					printf("\t\t%d\t\t%s\t\t%.2f\n", l->next->data.id, l->next->data.name, l->next->data.math);
+					l = l->next;
+			}
+			printf("\n");
+			printf("按回车键继续...\n");
+			while(getchar()!='\n');
+		}
+		else
+		{
+			printf("\t\tid\t\t名字\t\t语文\n");
+			while(l->next != NULL)
+			{
+					printf("\t\t%d\t\t%s\t\t%.2f\n", l->next->data.id, l->next->data.name, l->next->data.chinese);
+					l = l->next;
+			}
+			printf("\n");
+			printf("按回车键继续...\n");
+			while(getchar()!='\n');
+		}
 }
 
 
 
-
-
-
+//删除学生信息
 void delete_student_info(student *ptr)
 {
-
 		student_t *l = read_student_file();
 		if(l->next == NULL)
 		{
@@ -163,8 +187,8 @@ void delete_student_info(student *ptr)
 }
 
 
-
-void change_student_info(student *ptr)
+//按职位更改学生信息
+void change_student_info(int subject, student *ptr)
 {
 		student_t *l = read_student_file();
 		if(l->next == NULL)
@@ -179,18 +203,16 @@ void change_student_info(student *ptr)
 		scanf("%d",&id);
 		while(getchar()!='\n');
 		student_t *head = l;  //记录头结点
-		student_t *p = NULL;
 		while(l->next != NULL)
 		{
 				if(l->next->data.id == id)
-				{
-						p = l->next;
+				{	
 						break;
 				}
 				l = l->next;
 				
 		}
-		if(p == NULL)
+		if(l->next == NULL)
 		{
 				printf("无此id学生\n"
 						"按回车键继续...");
@@ -201,15 +223,35 @@ void change_student_info(student *ptr)
 		memset(&temp, 0, sizeof(temp));
 
 		temp.id = id;
-		printf("输入新的学生姓名：");
-		scanf("%s",temp.name);
-		while(getchar()!='\n');
-		printf("输入新的数学成绩：");
-		scanf("%f",&temp.math);
-		while(getchar()!='\n');
-		printf("输入新的语文成绩：");
-		scanf("%f",&temp.chinese);
-		while(getchar()!='\n');
+	    strncpy(temp.passwd, l->next->data.passwd, MAX_PASSWD_LEN-1); 
+		if(subject == HEAD)
+		{
+				printf("输入id为：%d的学生姓名：", id);
+				scanf("%s",temp.name);
+				while(getchar()!='\n');
+				printf("输入新的数学成绩：");
+				scanf("%f",&temp.math);
+				while(getchar()!='\n');
+				printf("输入新的语文成绩：");
+				scanf("%f",&temp.chinese);
+				while(getchar()!='\n');
+		}
+		else if(subject == MATH)
+		{
+	   		    strncpy(temp.name, l->next->data.name, MAX_NAME_LEN-1); 
+				temp.chinese = l->next->data.chinese;
+				printf("输入%s新的数学成绩：", l->next->data.name);
+				scanf("%f",&temp.math);
+				while(getchar()!='\n');
+		}
+		else
+		{
+	   		    strncpy(temp.name, l->next->data.name, MAX_NAME_LEN-1); 
+				temp.chinese = l->next->data.math;
+				printf("输入%s新的语文成绩：", l->next->data.name);
+				scanf("%f",&temp.chinese);
+				while(getchar()!='\n');
+		}
 
 	  	l->next->data = temp;
 
@@ -218,14 +260,105 @@ void change_student_info(student *ptr)
 		while(getchar()!='\n');
 		if(ptr != NULL)
 		{
-				*ptr = p->data;
+				*ptr = l->next->data;
 		}
 		
    	    write_student_file(head);
 }
 
+//任课老师排序学生信息 0：数学 1:语文
+void print_student_info_from_other(int kind)
+{
+	student_t *l = read_student_file();
+	if(l->next == NULL)
+	{
+		printf("没有任何信息\n"
+				"按回车键继续...\n");
+		while(getchar()!='\n');
+		return ;
+	}
+	student_t *p1 = l->next;
+	student_t *low = memset(&low, 0, sizeof(low));
+	student_t *p2 = memset(&low, 0, sizeof(low));
+	student_t *temp=(student_t *)malloc(sizeof(student_t));
+	temp->next = NULL;
+	
+	while(p1 != NULL)
+	{
+		low = p1;
+		p2 = p1->next;
+		while(p2 != NULL)
+		{
+			if(MATH == kind)
+			{
+					if(low->data.math  > p2->data.math )
+					{
+						low = p2;
+						p2 = p2->next;
+					}
+					else
+					{
+						p2 = p2->next;
+					}
+			}
+			else if(CHINESE == kind)
+			{
+					if(low->data.chinese > p2->data.chinese)
+					{
+							low = p2;
+							p2 = p2->next;
+					}
+					else
+					{
+							p2 = p2->next;
+					}
+			}
+			else
+			{
+					if(low->data.id > p2->data.id)
+					{
+						low = p2;
+						p2 = p2->next;
+					}
+					else
+					{
+						p2 = p2->next;
+					}
+			}
+		}
+		if(low != p1)
+		{
+			temp->data = low->data;
+			low->data = p1->data;
+			p1->data = temp->data;
+		}	
+		p1 = p1->next;
+	}
+	if(MATH == kind)
+	{
+	    printf("\t\tid\t\t名字\t\t数学\n");
+		while(l->next != NULL)
+		{
+				printf("\t\t%d\t\t%s\t\t%.2f\t\t\n", l->next->data.id, l->next->data.name, l->next->data.math);
+					l = l->next;
+		}
+	}
+	if(CHINESE == kind)
+	{
+	    printf("\t\tid\t\t名字\t\t语文\n");
+		while(l->next != NULL)
+		{
+				printf("\t\t%d\t\t%s\t\t%.2f\n", l->next->data.id, l->next->data.name, l->next->data.chinese);
+					l = l->next;
+		}
+	}
+	printf("\n");
+	printf("按回车键继续...\n");
+	while(getchar()!='\n');
+}
 
-void print_student_info_by_ranking()
+//打印学生全部信息 0:按总分排名  其他:按id排名
+void print_student_info_from_head(int select)
 {
 	student_t *l = read_student_file();
 	if(l->next == NULL)
@@ -248,14 +381,29 @@ void print_student_info_by_ranking()
 		p2 = p1->next;
 		while(p2 != NULL)
 		{
-			if(low->data.math > p2->data.math)
+			if(0 == select)
 			{
-				low = p2;
-				p2 = p2->next;
+					if(low->data.math + low->data.chinese > p2->data.math + p2->data.chinese)
+					{
+						low = p2;
+						p2 = p2->next;
+					}
+					else
+					{
+						p2 = p2->next;
+					}
 			}
 			else
 			{
-				p2 = p2->next;
+					if(low->data.id > p2->data.id)
+					{
+						low = p2;
+						p2 = p2->next;
+					}
+					else
+					{
+						p2 = p2->next;
+					}
 			}
 		}
 		if(low != p1)
@@ -266,19 +414,16 @@ void print_student_info_by_ranking()
 		}	
 		p1 = p1->next;
 	}
-	
+	    printf("\t\tid\t\t密码\t\t名字\t\t数学\t\t语文\t\t总成绩\n");
 		while(l->next != NULL)
 		{
-				printf("\t\t%d\t\t%s\t\t%.2f\t\t%.2f\n", l->next->data.id, l->next->data.name, l->next->data.math, l->next->data.chinese);
+					printf("\t\t%d\t\t%s\t\t%s\t\t%.2f\t\t%.2f\t\t%.2f\n", l->next->data.id, l->next->data.passwd, l->next->data.name, l->next->data.math, l->next->data.chinese, l->next->data.math + l->next->data.chinese);
 				l = l->next;
 		}
 		printf("\n");
 		printf("按回车键继续...\n");
 		while(getchar()!='\n');
-	
 }
-
-
 
 void change_teacher_passwd()
 {
@@ -330,16 +475,6 @@ void change_teacher_passwd()
 				}
 		}
 }
-
-
-
-
-
-
-
-
-
-
 
 
 
