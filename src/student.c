@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include "../include/include.h"
 #include "../include/tool.h"
 #include "../include/teacher.h"
+#include "../include/root.h"
 
 //打印自己的信息
 void print_own_info()
@@ -78,7 +80,40 @@ void change_student_passwd()
 }
 
 
+//给老师留言
+void leave_info_to_teacher()
+{
+		    system("clear");
+			teacher_t *l = read_teacher_file();
+			teacher_t *head = l;
+			printf("请输入教师工号：\n");
+			scanf("%d",&teacher_id);
+			while(getchar()!='\n');
+			if(l->next == NULL)
+			{
+					printf("没有任何教师记录\n"
+							"按回车键继续...\n");
+					while(getchar()!='\n');
+					return ;
+			}
+			while(l->next != NULL)
+			{
+					if(l->next->data.id == teacher_id)
+					{
+							break;
+					}
+					l = l->next;
+			}
+			char word[MAX_WORD_LEN] = "无";
+			printf("请写入你想对%s老师说的话:", l->next->data.name);
+			my_gets(word, MAX_WORD_LEN);
+			strncpy(l->next->data.word, word, MAX_WORD_LEN);
+			write_teacher_file(head);
+			printf("书写成功！按回车回车键继续...\n");
+			while(getchar()!='\n');
 
+		
+}
 
 
 

@@ -9,6 +9,8 @@
 #define CHINESE 2 //语文教师
 
 #define MAX_WORD_LEN 50 //教师留言最大长度
+
+
 #define RESIGN_SUCCEED 1 //辞职成功
 #define RESIGN_FAILED 0 //辞职失败
 
@@ -27,6 +29,7 @@ typedef struct teacher_tpye
 		int subject;
 		char word[MAX_WORD_LEN];
 		int resign;
+		int resign_r;  //管理员是否同意辞职
 
 }teacher;
 //教师链表结点

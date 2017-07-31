@@ -10,3 +10,7 @@ $(FINAL):$(OBJECT)
 	$(CC) -c $< -o $@ $(OPTIONS)
 clean:
 	rm -rvf $(OBJECT) $(FINAL) 
+cleant:
+	rm -rvf *.txt
+built:
+	touch student.txt teacher.txt

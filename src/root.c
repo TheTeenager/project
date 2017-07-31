@@ -8,6 +8,7 @@
 void input_teacher_info()
 {
 	teacher_t *l = read_teacher_file();
+	teacher_t *head = l;
 	teacher_t *temp = (teacher_t *)malloc(sizeof(teacher_t));
 	if(temp == NULL)
 	{
@@ -17,9 +18,22 @@ void input_teacher_info()
 	temp->next = NULL;
 	strncpy(temp->data.passwd, "123", MAX_PASSWD_LEN-1);  //教师默认密码123
 	temp->data.resign = 0;  //默认教师未辞职
+	temp->data.resign_r = 0;  //默认管理员未同意辞职
+	strncpy(temp->data.word, "空", MAX_WORD_LEN-1);  //默认留言为空
 	printf("输入教师工号：");
 	scanf("%d",&temp->data.id);
 	while(getchar()!='\n');
+	while(l->next != NULL)
+	{
+			if(l->next->data.id == temp->data.id)
+			{
+					printf("创建失败！此id属于%s老师\n", l->next->data.name);
+					printf("按回车键继续...\n");
+					while(getchar()!='\n');
+					return ;
+			}
+			l = l->next;
+	}
 	printf("输入教师姓名：");
 	scanf("%s",temp->data.name);
 	while(getchar()!='\n');
@@ -27,16 +41,16 @@ void input_teacher_info()
 	scanf("%d", &temp->data.subject);
 	while(getchar()!='\n');
 	
-	if(l->next != NULL)
+	if(head->next != NULL)
 	{
-		temp->next = l->next;
-	    l->next = temp;
+		temp->next = head->next;
+	    head->next = temp;
 	}
 	else
 	{
-		l->next = temp;
+		head->next = temp;
 	}
-	write_teacher_file(l);
+	write_teacher_file(head);
 	printf("添加教师成功\n"
 			"按回车键继续...\n");
 	while(getchar()!='\n');
@@ -97,10 +111,10 @@ void print_teacher_info()
 				return ;
 		}
 		printf("\t\t注释：科目中 0.班主任，1.数学教师，2.语文教师\n"
-						"\t\t教工号\t\t密码\t\t名字\t\t科目\t\t辞职否\n");
+						"\t\t教工号\t\t密码\t\t名字\t\t科目\t\t留言\t\t辞职否\n");
 		while(l->next != NULL)
 		{
-				printf("\t\t%d\t\t%s\t\t%s\t\t%d\t\t%d\n", l->next->data.id, l->next->data.passwd, l->next->data.name, l->next->data.subject, l->next->data.resign);
+				printf("\t\t%d\t\t%s\t\t%s\t\t%d\t\t%s\t\t%d\n", l->next->data.id, l->next->data.passwd, l->next->data.name, l->next->data.subject, l->next->data.word, l->next->data.resign);
 				l = l->next;
 		}
 		printf("\n");
@@ -109,7 +123,7 @@ void print_teacher_info()
 }
 
 
-
+//删除教师信息
 void delete_teacher_info(teacher *ptr)
 {
 
@@ -135,7 +149,6 @@ void delete_teacher_info(teacher *ptr)
 						break;
 				}
 				l = l->next;
-				
 		}
 		if(p == NULL)
 		{
@@ -153,12 +166,11 @@ void delete_teacher_info(teacher *ptr)
 				*ptr = p->data;
 		}
 		free(p), p = NULL;
-		
    	    write_teacher_file(head);
 }
 
 
-
+//更改教师信息
 void change_teacher_info(teacher *ptr)
 {
 		teacher_t *l = read_teacher_file();
@@ -197,14 +209,14 @@ void change_teacher_info(teacher *ptr)
 
 		temp.id = id;
     	strncpy(temp.passwd,  l->next->data.passwd, MAX_PASSWD_LEN-1);
+		temp.resign = l->next->data.resign;
+		temp.resign_r = l->next->data.resign_r;
+		strncpy(temp.word, l->next->data.word, MAX_PASSWD_LEN-1);
 		printf("输入新的教师姓名：");
 		scanf("%s",temp.name);
 		while(getchar()!='\n');
 		printf("输入新的教师教学科目(0.班主任 1.数学教师 2.语文教师)：");
 		scanf("%d", &temp.subject);
-		while(getchar()!='\n');
-		printf("输入辞职是否成功（1.成功 0.失败）：");
-		scanf("%d", &temp.resign);
 		while(getchar()!='\n');
 
 	  	l->next->data = temp;

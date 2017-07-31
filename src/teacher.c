@@ -10,6 +10,7 @@
 void input_student_info()
 {
 	student_t *l = read_student_file();
+	student_t *head = l;
 	student_t *temp = (student_t *)malloc(sizeof(student_t));
 	if(temp == NULL)
 	{
@@ -21,6 +22,17 @@ void input_student_info()
 	printf("输入学生id：");
 	scanf("%d",&temp->data.id);
 	while(getchar()!='\n');
+	while(l->next != NULL)
+	{
+			if(l->next->data.id == temp->data.id)
+			{
+					printf("创建失败！此id属于%s同学\n", l->next->data.name);
+					printf("按回车键继续...\n");
+					while(getchar()!='\n');
+					return ;
+			}
+			l = l->next;
+	}
 	printf("输入学生姓名：");
 	scanf("%s",temp->data.name);
 	while(getchar()!='\n');
@@ -31,16 +43,16 @@ void input_student_info()
 	scanf("%f",&temp->data.chinese);
 	while(getchar()!='\n');
 	
-	if(l->next != NULL)
+	if(head->next != NULL)
 	{
-		temp->next = l->next;
-	    l->next = temp;
+		temp->next = head->next;
+	    head->next = temp;
 	}
 	else
 	{
-		l->next = temp;
+		head->next = temp;
 	}
-	write_student_file(l);
+	write_student_file(head);
 	printf("添加学生成功\n"
 			"按回车键继续...\n");
 	while(getchar()!='\n');
@@ -98,6 +110,35 @@ void print_student_info(int subject)  //参数为教师职位
 						"按回车键继续...\n");
 				while(getchar()!='\n');
 				return ;
+		}
+		student_t *p1 = l->next;
+		student_t *low = memset(&low, 0, sizeof(low));
+		student_t *p2 = memset(&low, 0, sizeof(low));
+		student_t *temp = (student_t *)malloc(sizeof(student_t));
+		temp->next = NULL;
+		while(p1 != NULL)
+		{
+				low = p1;
+				p2 = p1->next;
+				while(p2 != NULL)
+				{
+						if(strcmp(low->data.name, p2->data.name)>0)
+						{
+								low = p2;
+								p2 = p2->next;
+						}
+						else
+						{
+								p2 = p2->next;
+						}
+				}
+				if(low != p1)
+				{
+						temp->data = low->data;
+						low->data = p1->data;
+						p1->data = temp->data;
+				}
+				p1 = p1->next;
 		}
 		if(subject == HEAD)
 		{
@@ -266,7 +307,7 @@ void change_student_info(int subject, student *ptr)
    	    write_student_file(head);
 }
 
-//任课老师排序学生信息 0：数学 1:语文
+//任课老师排序学生信息 1：数学 2:语文
 void print_student_info_from_other(int kind)
 {
 	student_t *l = read_student_file();
@@ -372,7 +413,7 @@ void print_student_info_from_head(int select)
 	student_t *low = memset(&low, 0, sizeof(low));
 	student_t *p2 = memset(&low, 0, sizeof(low));
 	
-	student_t *temp=(student_t *)malloc(sizeof(student_t));
+	student_t *temp = (student_t *)malloc(sizeof(student_t));
 	temp->next = NULL;
 	
 	while(p1 != NULL)
@@ -475,6 +516,47 @@ void change_teacher_passwd()
 				}
 		}
 }
+
+//辞职申请
+void resign()
+{
+		teacher_t *l = read_teacher_file();
+		teacher_t *head = l;
+		while(l->next != NULL)
+		{
+				if(l->next->data.id == teacher_id)
+				{
+						break;
+				}
+				l = l->next;
+		}
+		char choose = '\0';
+		printf("你真的要发辞职申请吗？\n1.确定\n其他键.取消\n");
+		scanf("%c", &choose);
+		while(getchar()!='\n');
+		if('1' == choose)
+		{
+				l->next->data.resign_r = 1;
+				write_teacher_file(head);
+				printf("辞职请求已发送...请等待管理员审核\n"
+						"按回车键继续...\n");
+				while(getchar()!='\n');
+		}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

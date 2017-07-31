@@ -28,6 +28,7 @@ void print_student_info_from_head(int select);
 //教师更改密码
 void change_teacher_passwd();
 
-
+//辞职申请
+void resign();
 
 #endif 
