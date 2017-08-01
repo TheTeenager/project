@@ -107,7 +107,7 @@ void leave_info_to_teacher()
 					return ;
 			}
 			char word[MAX_WORD_LEN] = "无";
-			printf("\n\t\t请写入你想对%s老师说的话:", l->next->data.name);
+			printf("\n\t\t请写入你想对\33[31m\33[1m%s\33[0m老师说的话:", l->next->data.name);
 			my_gets(word, MAX_WORD_LEN);
 			strncpy(l->next->data.word, word, MAX_WORD_LEN);
 			write_teacher_file(head);

@@ -234,3 +234,9 @@ void change_teacher_info(teacher *ptr)
 }
 
 
+
+
+
+
+
+

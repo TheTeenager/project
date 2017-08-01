@@ -22,6 +22,4 @@ void delete_teacher_info();
 
 
 
-
-
 #endif

@@ -147,7 +147,7 @@ void print_student_info(int subject)  //参数为教师职位
 					l = l->next;
 			}
 			printf("\n");
-			printf("\n按回车键继续...");
+			printf("\n\t按回车键继续...");
 			while(getchar()!='\n');
 		}
 		else if(subject == MATH)
@@ -159,7 +159,7 @@ void print_student_info(int subject)  //参数为教师职位
 					l = l->next;
 			}
 			printf("\n");
-			printf("\n按回车键继续...");
+			printf("\n\t按回车键继续...");
 			while(getchar()!='\n');
 		}
 		else
@@ -171,7 +171,7 @@ void print_student_info(int subject)  //参数为教师职位
 					l = l->next;
 			}
 			printf("\n");
-			printf("\n按回车键继续...");
+			printf("\n\t按回车键继续...");
 			while(getchar()!='\n');
 		}
 }
@@ -459,7 +459,7 @@ void print_student_info_from_head(int select)
 void change_teacher_passwd()
 {
 		char check_passwd[MAX_PASSWD_LEN] = {'\0'};
-		printf("请输入原来密码（初始密码为123）：");
+		printf("\n\t\t请输入原来密码（初始密码为123）：");
 		my_gets(check_passwd, MAX_PASSWD_LEN);
 		teacher_t *l = read_teacher_file();
 		teacher_t *head = l;
