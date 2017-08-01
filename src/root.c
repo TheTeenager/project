@@ -12,7 +12,7 @@ void input_teacher_info()
 	teacher_t *temp = (teacher_t *)malloc(sizeof(teacher_t));
 	if(temp == NULL)
 	{
-		printf("开辟空间失败\n");
+		printf("\t开辟空间失败\n");
 		return ;
 	}
 	temp->next = NULL;
@@ -20,39 +20,47 @@ void input_teacher_info()
 	temp->data.resign = 0;  //默认教师未辞职
 	temp->data.resign_r = 0;  //默认管理员未同意辞职
 	strncpy(temp->data.word, "空", MAX_WORD_LEN-1);  //默认留言为空
-	printf("输入教师工号：");
+	printf("\t输入教师工号：");
 	scanf("%d",&temp->data.id);
 	while(getchar()!='\n');
 	while(l->next != NULL)
 	{
 			if(l->next->data.id == temp->data.id)
 			{
-					printf("创建失败！此id属于%s老师\n", l->next->data.name);
-					printf("按回车键继续...\n");
+					printf("\n\t创建失败！此id属于%s老师\n", l->next->data.name);
+					printf("\t按回车键继续...");
 					while(getchar()!='\n');
 					return ;
 			}
 			l = l->next;
 	}
-	printf("输入教师姓名：");
+	printf("\n\t输入教师姓名：");
 	scanf("%s",temp->data.name);
 	while(getchar()!='\n');
-	printf("输入教师教学科目(0.班主任 1.数学教师 2.语文教师)：");
+	printf("\n\t输入教师教学科目(0.班主任 1.数学教师 2.语文教师)：");
 	scanf("%d", &temp->data.subject);
 	while(getchar()!='\n');
-	
-	if(head->next != NULL)
+	if(temp->data.subject == 0 || temp->data.subject == 1 || temp->data.subject == 2 )
 	{
-		temp->next = head->next;
-	    head->next = temp;
+			;
 	}
 	else
 	{
-		head->next = temp;
+			printf("\n\t创建失败！无此教师类别  按回车键继续...");
+			while(getchar()!='\n');
+			return ;
+	}
+	if(head->next != NULL)
+	{
+			temp->next = head->next;
+		    head->next = temp;
+	}
+	else
+	{
+			head->next = temp;
 	}
 	write_teacher_file(head);
-	printf("添加教师成功\n"
-			"按回车键继续...\n");
+	printf("\n\t添加教师成功  按回车键继续...");
 	while(getchar()!='\n');
 	return;
 }
@@ -61,9 +69,9 @@ void input_teacher_info()
 //写入教师文件
 void write_teacher_file(teacher_t *l)
 {
-	if(NULL == l->next)
+	if(NULL == l)
 	{
-		printf("没有信息保存\n");
+		printf("\n\t没有信息保存\n");
 		return ;
 	}	
 	FILE *fp;
@@ -105,12 +113,11 @@ void print_teacher_info()
 		teacher_t *l = read_teacher_file();
 		if(l->next == NULL)
 		{
-				printf("没有教师信息\n"
-						"按回车键继续...\n");
+				printf("\n\t没有教师信息  按回车键继续...");
 				while(getchar()!='\n');
 				return ;
 		}
-		printf("\t\t注释：科目中 0.班主任，1.数学教师，2.语文教师\n"
+		printf("\n\t\t注释：科目中 0.班主任，1.数学教师，2.语文教师\n"
 						"\t\t教工号\t\t密码\t\t名字\t\t科目\t\t留言\t\t辞职否\n");
 		while(l->next != NULL)
 		{
@@ -118,7 +125,7 @@ void print_teacher_info()
 				l = l->next;
 		}
 		printf("\n");
-		printf("按回车键继续...\n");
+		printf("\n\t按回车键继续...");
 		while(getchar()!='\n');
 }
 
@@ -130,12 +137,11 @@ void delete_teacher_info(teacher *ptr)
 		teacher_t *l = read_teacher_file();
 		if(l->next == NULL)
 		{
-				printf("没有教师信息\n"
-						"按回车键继续...\n");
+				printf("\n\t没有教师信息  按回车键继续...");
 				while(getchar()!='\n');
 				return ;
 		}
-		printf("请输入想要删除教师的工号：\n");
+		printf("\n\t请输入想要删除教师的工号：");
 		int id = 0;
 		scanf("%d",&id);
 		while(getchar()!='\n');
@@ -152,14 +158,12 @@ void delete_teacher_info(teacher *ptr)
 		}
 		if(p == NULL)
 		{
-				printf("无此工号的老师\n");	
-				printf("按回车键继续...\n");
+				printf("\n\t无此工号的老师 按回车键继续...");
 				while(getchar()!='\n');
 				return;
 		}
 		l->next = p->next;
-		printf("删除成功!\n"
-				"按回车键继续...\n");
+		printf("\n\t删除成功! 按回车键继续...\n");
 		while(getchar()!='\n');
 		if(ptr != NULL)
 		{
@@ -176,12 +180,11 @@ void change_teacher_info(teacher *ptr)
 		teacher_t *l = read_teacher_file();
 		if(l->next == NULL)
 		{
-				printf("没有教师信息\n"
-						"按回车键继续\n");
+				printf("\n\t没有教师信息  按回车键继续...");
 				while(getchar()!='\n');
 				return ;
 		}
-		printf("请输入想要更改教师的工号\n");
+		printf("\n\t请输入想要更改教师的工号：");
 		int id = 0;
 		scanf("%d",&id);
 		while(getchar()!='\n');
@@ -199,8 +202,7 @@ void change_teacher_info(teacher *ptr)
 		}
 		if(p == NULL)
 		{
-				printf("无此工号的老师\n"
-						"按回车键继续...");
+				printf("\n\t无此工号的老师  按回车键继续...");
 				while(getchar()!='\n');
 				return;
 		}
@@ -212,17 +214,16 @@ void change_teacher_info(teacher *ptr)
 		temp.resign = l->next->data.resign;
 		temp.resign_r = l->next->data.resign_r;
 		strncpy(temp.word, l->next->data.word, MAX_PASSWD_LEN-1);
-		printf("输入新的教师姓名：");
+		printf("\n\t输入新的教师姓名：");
 		scanf("%s",temp.name);
 		while(getchar()!='\n');
-		printf("输入新的教师教学科目(0.班主任 1.数学教师 2.语文教师)：");
+		printf("\n\t输入新的教师教学科目(0.班主任 1.数学教师 2.语文教师)：");
 		scanf("%d", &temp.subject);
 		while(getchar()!='\n');
 
 	  	l->next->data = temp;
 
-		printf("修改成功!\n"
-				"按回车键继续...\n");
+		printf("\n\t修改成功!  按回车键继续...");
 		while(getchar()!='\n');
 		if(ptr != NULL)
 		{
