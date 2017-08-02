@@ -131,7 +131,7 @@ void print_teacher_info()
 
 
 //删除教师信息
-void delete_teacher_info(teacher *ptr)
+void delete_teacher_info()
 {
 
 		teacher_t *l = read_teacher_file();
@@ -162,20 +162,25 @@ void delete_teacher_info(teacher *ptr)
 				while(getchar()!='\n');
 				return;
 		}
+		printf("\n\t你真的要删除%s教师的信息吗？", l->next->data.name);
+		printf("\n\t1.确定  其他键.取消\n\t请输入你的选择：");
+		char choose = '\0';
+		scanf("%c", &choose);
+		while(getchar()!='\n');
+		if(choose != '1')
+		{
+				return ;
+		}
 		l->next = p->next;
 		printf("\n\t删除成功! 按回车键继续...\n");
 		while(getchar()!='\n');
-		if(ptr != NULL)
-		{
-				*ptr = p->data;
-		}
 		free(p), p = NULL;
    	    write_teacher_file(head);
 }
 
 
 //更改教师信息
-void change_teacher_info(teacher *ptr)
+void change_teacher_info()
 {
 		teacher_t *l = read_teacher_file();
 		if(l->next == NULL)
@@ -225,15 +230,8 @@ void change_teacher_info(teacher *ptr)
 
 		printf("\n\t修改成功!  按回车键继续...");
 		while(getchar()!='\n');
-		if(ptr != NULL)
-		{
-				*ptr = p->data;
-		}
-		
    	    write_teacher_file(head);
 }
-
-
 
 
 

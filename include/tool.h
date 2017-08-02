@@ -6,12 +6,9 @@
 void my_gets(char *str, int size);
 
 //心型 a调大小
-void heart();
-
-//菱形 n调大小
-void ling();
+void heart(int size, int time);
 
 //三角形 n调大小
-void three();
+void three(int size, int time);
 
 #endif

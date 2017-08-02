@@ -14,10 +14,10 @@ student_t * read_student_file();
 void print_student_info(int subject);
 
 //删除学生信息
-void delete_student_info(student *l);
+void delete_student_info();
 
 //更改学生信息
-void change_student_info(int subject, student *l);
+void change_student_info(int subject);
 
 //排序学生部分信息 
 void print_student_info_from_other(int kind);

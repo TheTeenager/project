@@ -47,31 +47,30 @@ void change_student_passwd()
 		{
 				printf("\n\t\t密码输入有误！按回车键继续...");
 				while(getchar()!='\n');
+				return;
 		}
 		else
 		{
-				while(1)
-				{
-					char re_passwd1[MAX_PASSWD_LEN];
-					char re_passwd2[MAX_PASSWD_LEN];
+				char re_passwd1[MAX_PASSWD_LEN];
+				char re_passwd2[MAX_PASSWD_LEN];
 
-					printf("\n\t\t请输入新密码：");
-					my_gets(re_passwd1, MAX_PASSWD_LEN);
-					printf("\n\t\t请再次输入：");
-					my_gets(re_passwd2, MAX_PASSWD_LEN);
-					if(strcmp(re_passwd1, re_passwd2) == 0)
-					{
-							strncpy(l->next->data.passwd, re_passwd1, MAX_PASSWD_LEN);
-							write_student_file(head);
-							printf("\n\t\t密码修改成功!  按回车键继续...");
-							while(getchar()!='\n');
-							break;
-					}
-					else
-					{
-							printf("\n\t\t两次密码不一致请重新输入 按回车键继续...");
-							while(getchar()!='\n');
-					}
+				printf("\n\t\t请输入新密码：");
+				my_gets(re_passwd1, MAX_PASSWD_LEN);
+				printf("\n\t\t请再次输入：");
+				my_gets(re_passwd2, MAX_PASSWD_LEN);
+				if(strcmp(re_passwd1, re_passwd2) == 0)
+				{
+						strncpy(l->next->data.passwd, re_passwd1, MAX_PASSWD_LEN);
+						write_student_file(head);
+						printf("\n\t\t密码修改成功!  按回车键继续...");
+						while(getchar()!='\n');
+						return ;
+				}
+				else
+				{
+						printf("\n\t\t两次密码不一致请重新输入 按回车键继续...");
+						while(getchar()!='\n');
+						return ;
 				}
 		}
 }
@@ -106,12 +105,12 @@ void leave_info_to_teacher()
 					while(getchar()!='\n');
 					return ;
 			}
-			char word[MAX_WORD_LEN] = "无";
+			char word[MAX_WORD_LEN] = {"无"};
 			printf("\n\t\t请写入你想对\33[31m\33[1m%s\33[0m老师说的话:", l->next->data.name);
 			my_gets(word, MAX_WORD_LEN);
-			strncpy(l->next->data.word, word, MAX_WORD_LEN);
+			strncpy(l->next->data.word, word, MAX_WORD_LEN-1);
 			write_teacher_file(head);
-			printf("\n\t\t书写成功！按回车回车键继续...\n");
+			printf("\n\t\t书写成功！按回车回车键继续...");
 			while(getchar()!='\n');
 
 		

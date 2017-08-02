@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
 #include "../include/include.h"
 #include "../include/teacher.h"
 #include "../include/tool.h"
@@ -179,7 +180,7 @@ void print_student_info(int subject)  //参数为教师职位
 
 
 //删除学生信息
-void delete_student_info(student *ptr)
+void delete_student_info()
 {
 		student_t *l = read_student_file();
 		if(l->next == NULL)
@@ -210,13 +211,18 @@ void delete_student_info(student *ptr)
 				while(getchar()!='\n');
 				return;
 		}
+		printf("\n\t你真的要删除%s同学的信息吗？", l->next->data.name);
+		printf("\n\t1.确定  其他键.取消\n\t请输入你的选择：");
+		char choose = '\0';
+		scanf("%c", &choose);
+		while(getchar()!='\n');
+		if(choose != '1')
+		{
+				return ;
+		}
 		l->next = p->next;
 		printf("\n\t\t删除成功! 按回车键继续...");
 		while(getchar()!='\n');
-		if(ptr != NULL)
-		{
-				*ptr = p->data;
-		}
 		free(p), p = NULL;
 		
    	    write_student_file(head);
@@ -224,7 +230,7 @@ void delete_student_info(student *ptr)
 
 
 //按职位更改学生信息
-void change_student_info(int subject, student *ptr)
+void change_student_info(int subject)
 {
 		student_t *l = read_student_file();
 		if(l->next == NULL)
@@ -291,10 +297,6 @@ void change_student_info(int subject, student *ptr)
 
 		printf("\n\t\t修改成功! 按回车键继续...");
 		while(getchar()!='\n');
-		if(ptr != NULL)
-		{
-				*ptr = l->next->data;
-		}
 		
    	    write_student_file(head);
 }
@@ -456,10 +458,12 @@ void print_student_info_from_head(int select)
 		while(getchar()!='\n');
 }
 
+
+//老师改密码
 void change_teacher_passwd()
 {
 		char check_passwd[MAX_PASSWD_LEN] = {'\0'};
-		printf("\n\t\t请输入原来密码（初始密码为123）：");
+		printf("\n\t\t请输入原来的密码（初始密码为123）:");
 		my_gets(check_passwd, MAX_PASSWD_LEN);
 		teacher_t *l = read_teacher_file();
 		teacher_t *head = l;
@@ -475,13 +479,12 @@ void change_teacher_passwd()
 		{
 				printf("\n\t\t密码输入有误！按回车键继续...");
 				while(getchar()!='\n');
+				return ;
 		}
 		else
 		{
-				while(1)
-				{
-					char re_passwd1[MAX_PASSWD_LEN];
-					char re_passwd2[MAX_PASSWD_LEN];
+					char re_passwd1[MAX_PASSWD_LEN] = {'\0'};
+					char re_passwd2[MAX_PASSWD_LEN] = {'\0'};
 
 					printf("\n\t\t请输入新密码：");
 					my_gets(re_passwd1, MAX_PASSWD_LEN);
@@ -489,18 +492,18 @@ void change_teacher_passwd()
 					my_gets(re_passwd2, MAX_PASSWD_LEN);
 					if(strcmp(re_passwd1, re_passwd2) == 0)
 					{
-							strncpy(l->next->data.passwd, re_passwd1, MAX_PASSWD_LEN);
+							strncpy(l->next->data.passwd, re_passwd1, MAX_PASSWD_LEN-1);
 							write_teacher_file(head);
 							printf("\n\t\t密码修改成功!  按回车键继续...\n");
 							while(getchar()!='\n');
-							break;
+							return ;
 					}
 					else
 					{
 							printf("\n\t\t两次密码不一致请重新输入 按回车键继续...");
 							while(getchar()!='\n');
+							return ;
 					}
-				}
 		}
 }
 
@@ -530,20 +533,6 @@ void resign()
 				while(getchar()!='\n');
 		}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

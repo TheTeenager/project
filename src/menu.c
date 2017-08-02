@@ -20,7 +20,7 @@ void main_menu()
 				{
 				system("clear");
 				printf("\n\n\n\n");
-				printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+				printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 				printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\n");
 				printf("\t\t|                                                                |\n");
 				printf("\t\t|                                                                |\n");
@@ -33,7 +33,7 @@ void main_menu()
 				printf("\t\t|\t\t\t\33[31m0.退出\33[0m\t\t\t\t\t\33[30m |\n");
 				printf("\t\t|                                                                |\n");
 				printf("\t\t——————————————————————————————————————————————————————————————————\n\n\n\n\n\n\33[0m");
-				heart();
+				heart(94,15000);
 				printf("\33[33A\t请输入你的选择：\33[?25h");
 				char choose = '\0';
 				scanf("%c",&choose);
@@ -69,14 +69,14 @@ void root_register_menu()
 {
 		int flag1 = 1;
 		int count = 0;
-		int second = 30;
+		int second = 20;
 		while(flag1)
 		{
 			system("clear");
 			printf("\n\n\n\n");
-			printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n\n");
+			printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n\n");
 			printf("\t\t\t\t\t\33[32m管理员登录界面\n\n\n\n\n\n\n\n\n\n\n\33[0m");
-			heart();
+			heart(94,15000);
 			printf("\t累计密码输错次数：\33[31m\33[1m%d\33[0m\n", count);
 			
 			//管理员名称及密码
@@ -151,7 +151,7 @@ void resign_menu()
 			{
 					system("clear");
 					printf("\n\n\n\n");
-					printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+					printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 					printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\n\33[0m");
 					char choose = '\0';
 					printf("\33[31m\t\t\t\t\t辞职申请界面\n\n\n"
@@ -200,7 +200,7 @@ void root_menu()
 		{
 				system("clear");
 				printf("\n\n\n\n");
-				printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+				printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 				printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\n");
 				printf("\33[32m\t\t\t\t\t管理员界面\n\n");
 				printf("\33[36m\t\t\t\t1.录入教师信息\n\n"
@@ -220,7 +220,7 @@ void root_menu()
 								break;
 						case '2':
 								//修改教师信息
-								change_teacher_info(NULL);
+								change_teacher_info();
 								break;
 						case '3':
 								//查看教师信息
@@ -228,7 +228,7 @@ void root_menu()
 								break;
 						case '4':
 								//删除教师信息
-								delete_teacher_info(NULL);
+								delete_teacher_info();
 								break;
 						case '5':
 								//注销登陆（返回上一菜单）
@@ -249,14 +249,14 @@ void teacher_register_menu()
 {
 		int flag1 = 1;
 		int count = 0;
-		int second = 30;
+		int second = 20;
 		while(flag1)
 		{
 		    system("clear");
 			printf("\n\n\n\n");
-			printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n\n");
+			printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n\n");
 			printf("\33[36m\t\t\t\t\t教师登录界面\33[0m\n\n\n\n\n\n\n\n\n\n\n");
-			heart();
+			heart(94,15000);
 			printf("\t累计密码输错次数：\33[31m\33[1m%d\33[0m\n", count);
 			teacher_t *l = read_teacher_file();
 			char check_passwd[MAX_PASSWD_LEN];
@@ -282,8 +282,10 @@ void teacher_register_menu()
 			}
 			if(l->next == NULL)
 			{
-					printf("\n\t\t输入有误！按回车键继续...");
+					printf("\n\t\t无此id！按回车键继续回主菜单...");
 					while(getchar()!='\n');
+					return ;
+
 			}
 			if(strcmp(p, l->next->data.passwd) == 0)
 			{
@@ -330,7 +332,7 @@ void massage_menu()
 {
 		system("clear");
 		printf("\n\n\n\n");
-		printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+		printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 		printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\n");
 		printf("\33[36m\t\t\t\t\t消息界面\n\n\n");
 		teacher_t *l = read_teacher_file();
@@ -347,23 +349,24 @@ void massage_menu()
 		switch(l->next->data.resign_r)
 		{
 				case 2:
-					printf("\t\t    您好，非常感谢您这些年来对学校辛勤付出，您的辞职申请校方已经同意。\n\n"
-						   "\t\t这將是您最后一次登陆教务，祝您在以后的生活中身体健康，工作顺利。\n\n"
-						   "                                                        ————江苏大学教务处\n\n");
+					printf("\t\t    您好，非常感谢您这些年来对学校辛勤付出，您的辞职申请校方\33[31m已经同意\33[34m。\n\n"
+						   "\t\t感谢您这些年来对学校的巨大贡献，这將是您最后一次登陆教务，祝您在以后的生活中\n\n"
+						   "\t\t身体健康，工作顺利。\n\n"
+						   "                                                        ————某某大学教务处\n\n");
 					break;
 				case 3:
-					printf("\t\t    您好，您的辞职申请校方已经收到，教务处经过慎重考虑，未能批准您的申请。\n\n"
+					printf("\t\t    您好，您的辞职申请校方已经收到，教务处经过慎重考虑，\33[31m未能批准\33[34m您的申请。\n\n"
 						   "\t\t学生们希望继续得到您的教诲，祝您身体健康，工作顺利。\n\n"
-						   "                                                            ————江苏大学教务处\n\n");
+						   "                                                            ————某某大学教务处\n\n");
 					l->next->data.resign_r = 0;
 					write_teacher_file(head);
 					break;
 				case 1:
-					printf("\t\t    您好，管理员繁忙，暂时未查看您的辞职申请，请耐心等待...\n\n");
+					printf("\t\t    您好，管理员繁忙，\33[31m暂时未查\33[34m看您的辞职申请，请耐心等待...\n\n");
 					break;
 		}
 		printf("\n\t\t按回车键继续...\n\n\n\n\n\33[?25l\33[0m");
-		three();
+		three(20,10000);
 		while(getchar()!='\n');
 		if(l->next->data.subject == HEAD)
 		{
@@ -393,7 +396,7 @@ void head_teacher_menu()
 		{
 				system("clear");
 				printf("\n\n\n\n");
-				printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+				printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 				printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\n");
 				printf("\33[36m\t\t\t\t\t班主任界面\n\n");
 				printf("\33[34m\t\t\t\t欢迎班主任：\33[31m%s\33[34m的登录使用！\n\n", l->next->data.name);
@@ -423,11 +426,11 @@ void head_teacher_menu()
 								break;
 						case '3':
 								//更改学生信息
-						    	change_student_info(l->next->data.subject, NULL);
+						    	change_student_info(l->next->data.subject);
 								break;
 						case '4':
 								//删除学生信息
-								delete_student_info(NULL);
+								delete_student_info();
 								break;
 						case '5':
 								//查看信息按id升序
@@ -487,13 +490,13 @@ void myexit()
 		}
 		system("clear");
 		printf("\n\n\n\n");
-		printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+		printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 		printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\33[0m\n");
 		printf("\33[34m\t\t\t\t\t消息界面\n\n\n");
 		printf("\t\t尊敬的\33[31m%s\33[34m老师：\n\n", l->next->data.name);
-		printf("\t\t    您好，这是最后一次登陆江苏大学教务系统，对您的离职我们非常痛心。\n\n"
+		printf("\t\t    您好，这是最后一次登录某某大学教务系统，对您的离职我们非常痛心。\n\n"
 			   "\t\t望您以后身体健康，工作顺利。\n\n"
-			   "\t\t                                                  ————江苏大学教务处\n\n");
+			   "\t\t                                                  ————某某大学教务处\n\n");
 		printf("\t按回车键继续...\33[0m");
 		while(getchar()!='\n');
 		l->next = p->next;
@@ -519,7 +522,7 @@ void other_teacher_menu()
 		{
 				system("clear");
 				printf("\n\n\n\n");
-				printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+				printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 				printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\n");
 				printf("\33[36m\t\t\t\t\t任课教师界面\n\n");
 				printf("\33[34m\t\t\t\t欢迎任课教师：\33[31m%s\33[34m的登录使用！\n\n", l->next->data.name);
@@ -530,7 +533,7 @@ void other_teacher_menu()
 						"\33[35m\t\t\t\t5.辞职\n\n"
 						"\33[31m\t\t\t\t6.注销\n\n\n"
 						"\33[36m\t\t\t\tw.查看学生留言\33[0m\n\n");
-				printf("\t\t请输入你的选择\n");
+				printf("\t\t请输入你的选择");
 				char choose = '\0';
 				scanf("%c",&choose);
 				while(getchar()!='\n');
@@ -542,7 +545,7 @@ void other_teacher_menu()
 								break;
 						case '2':
 								//更改学生科目信息
-						    	change_student_info(l->next->data.subject, NULL);
+						    	change_student_info(l->next->data.subject);
 								break;
 						case '3':
 								//查看数学成绩排名
@@ -582,14 +585,14 @@ void student_register_menu()
 {
 		int flag1 = 1;
 		int count = 0;
-		int second = 30;
+		int second = 20;
 		while(flag1)
 		{
 		    system("clear");
 			printf("\n\n\n\n");
-			printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n\n");
+			printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n\n");
 			printf("\33[35m\t\t\t\t\t学生登录界面\n\n\n\n\n\n\n\n\n\n\n\33[0m");
-			heart();
+			heart(94, 15000);
 			printf("\t累计密码输错次数：\33[31m\33[1m%d\33[0m\n", count);
 			student_t *l = read_student_file();
 			char check_passwd[MAX_PASSWD_LEN];
@@ -601,7 +604,7 @@ void student_register_menu()
 			while(getchar()!='\n');
 			if(l->next == NULL)
 			{
-					printf("\n\t\t没有任何学生记录  按回车键继续...\n");
+					printf("\n\t\t没有任何学生记录  按回车键回主菜单...\n");
 					while(getchar()!='\n');
 					return ;
 			}
@@ -617,6 +620,7 @@ void student_register_menu()
 			{
 					printf("\n\t\t输入有误！按任意键继续...");
 					while(getchar()!='\n');
+					return ;
 			}
 			if(strcmp(p, l->next->data.passwd) == 0)
 			{
@@ -661,7 +665,7 @@ void student_menu()
 		{
 				system("clear");
 				printf("\n\n\n\n");
-				printf("\33[34m\t\t\t\t欢迎来到江苏大学教务系统！\n");
+				printf("\33[34m\t\t\t\t欢迎来到某某大学教务系统！\n");
 				printf("\33[30m\t\t——————————————————————————————————————————————————————————————————\n");
 				printf("\33[35m\t\t\t\t\t学生界面\n\n");
 				printf("\33[34m\t\t\t\t欢迎\33[31m%s\33[34m同学的登录使用！\n\n", l->next->data.name);
